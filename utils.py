@@ -59,9 +59,7 @@ def create_yolo_dataset(dataset, train_test_split = 0.8, output_folder='./'):
             # write each item on a new line
                 fp.write("%s " % item)
             fp.write("\n")  
-    
-    print(train_files)                     
-    print(test_files)         
+            
     with open(output_folder+'/data/test.txt', 'w') as fp:
         fp.writelines(test_files)         
     with open(output_folder+'/data/train.txt', 'w') as fp:
