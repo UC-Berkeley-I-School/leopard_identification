@@ -15,9 +15,7 @@ def create_yolo_dataset(dataset, train_test_split = 0.8, output_folder='./'):
     anno = [0, 0, 0, 0, 0]
     train_files = []
     test_files = []
-
-    count = 0
-                       
+       
     np.random.seed(42)
     
     train_image_path =  output_folder+'/data/obj'                   
@@ -36,11 +34,7 @@ def create_yolo_dataset(dataset, train_test_split = 0.8, output_folder='./'):
     for sample in dataset:  
         old_image_file = sample['filepath']
         train_image_file = 'data/obj/' + old_image_file.split("/")[-1]
-        new_image_file = output_folder + '/images/test/' + old_image_file.split("/")[-1]                
-        
-        if count > 10:
-            break
-        count = count + 1  
+        new_image_file = output_folder + '/images/test/' + old_image_file.split("/")[-1]                 
         
         if(np.random.random_sample() > train_test_split):        
             test_files.append(new_image_file+'\n')
