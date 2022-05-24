@@ -2,9 +2,6 @@ import fiftyone as fo
 import numpy as np
 import os
 
-import fiftyone as fo
-import numpy as np
-import os
 
 # Creates YOLOV4 dataset
 # Data split into train and test 
@@ -32,6 +29,23 @@ def create_yolo_dataset(dataset, train_test_split = 0.8, output_folder='./'):
         os.makedirs(test_image_path)                    
 
     for sample in dataset:  
+        anno[1:] = sample['ground_truth']['detections'][0]['bounding_box']
+        height = sample['metadata']['height']
+        width = sample['metadata']['width']
+        if anno[1] <=0:
+            anno[1] = 1.0/width
+            
+        if anno[2] <=0:
+            anno[2] = 1.0/height
+            
+        if anno[3] >=1.0:
+            anno[3] = 1-1.0/width
+            
+        if anno[4] >=1.0:
+            anno[4] = 1-1.0/height    
+       
+       
+            
         old_image_file = sample['filepath']
         train_image_file = 'data/obj/' + old_image_file.split("/")[-1]
         new_image_file = output_folder + '/images/test/' + old_image_file.split("/")[-1]                 
@@ -47,15 +61,14 @@ def create_yolo_dataset(dataset, train_test_split = 0.8, output_folder='./'):
         copy_str = 'cp ' + old_image_file + ' ' + new_image_file
         os.system(copy_str)
         
-        anno[1:] = sample['ground_truth']['detections'][0]['bounding_box']
         with open(new_anno_file, 'w') as fp:
             for item in anno:
             # write each item on a new line
                 fp.write("%s " % item)
             fp.write("\n")  
-            
+    
+   
     with open(output_folder+'/data/test.txt', 'w') as fp:
         fp.writelines(test_files)         
     with open(output_folder+'/data/train.txt', 'w') as fp:
         fp.writelines(train_files)  
-        
