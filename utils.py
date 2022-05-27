@@ -1,13 +1,3 @@
-import fiftyone as fo
-import numpy as np
-import os
-
-
-# Creates YOLOV4 dataset
-# Data split into train and test 
-# train set in images/train_2022/ and test in /images/test_2022
-# train files in ./data/train.txt and test files in ./data/test.txt
-
 def create_yolo_dataset(dataset, train_test_split = 0.8, output_folder='./'):
     anno = [0, 0, 0, 0, 0]
     train_files = []
@@ -32,17 +22,16 @@ def create_yolo_dataset(dataset, train_test_split = 0.8, output_folder='./'):
         anno[1:] = sample['ground_truth']['detections'][0]['bounding_box']
         height = sample['metadata']['height']
         width = sample['metadata']['width']
-        if anno[1] <=0:
-            anno[1] = 1.0/width
-            
-        if anno[2] <=0:
-            anno[2] = 1.0/height
-            
+        
+        
         if anno[3] >=1.0:
             anno[3] = 1-1.0/width
             
         if anno[4] >=1.0:
             anno[4] = 1-1.0/height    
+
+        anno[1] = anno[1]+0.5*anno[3]
+        anno[2] = anno[2]+0.5*anno[4]       
        
        
             
@@ -72,3 +61,4 @@ def create_yolo_dataset(dataset, train_test_split = 0.8, output_folder='./'):
         fp.writelines(test_files)         
     with open(output_folder+'/data/train.txt', 'w') as fp:
         fp.writelines(train_files)  
+        
