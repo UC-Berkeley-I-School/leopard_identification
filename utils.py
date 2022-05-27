@@ -1,3 +1,13 @@
+import fiftyone as fo
+import numpy as np
+import os
+
+
+# Creates YOLOV4 dataset
+# Data split into train and test 
+# train set in images/train_2022/ and test in /images/test_2022
+# train files in ./data/train.txt and test files in ./data/test.txt
+
 def create_yolo_dataset(dataset, train_test_split = 0.8, output_folder='./'):
     anno = [0, 0, 0, 0, 0]
     train_files = []
